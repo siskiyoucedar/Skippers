@@ -1,0 +1,13 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rdata
+.httr-oauth
+.DS_Store
+.quarto
+_Source_Data/
+_Spatial_Data/
+bin/
+stations_barriers.csv
+*.png
