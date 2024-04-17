@@ -1,12 +1,12 @@
 library(tidyverse)
 
 # read in your data
-# no changes were made to the barrier .ods except removing formatting
-# for the station entry / exits, irrelevant columns were removed in addition to formatting
-stations <- read.csv("stations_data.csv")
-barriers <- read.csv("barrier_data.csv")
+# no changes were made to the barrier .ods, except removing formatting
+# for the station entry / exits .ods, irrelevant columns were removed in addition to removing formatting
+stations <- read.csv("_Source_data/stations_data.csv")
+barriers <- read.csv("_Source_data/barrier_data.csv")
 
-# clean
+# clean - I really don't like these periods.
 
 barriers <- barriers |> 
   rename(
