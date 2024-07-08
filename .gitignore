@@ -11,3 +11,13 @@ _Spatial_Data/
 bin/
 stations_barriers.csv
 *.png
+TOC_contacts.csv
+source for new TB data.url
+source for change in fares.url
+99_scraping_bin.R
+0_Scraping.R
+ticket_fares.xlsx
+_Source_data/TOC_returns/TfW.pdf
+_Source_data/TOC_returns/Southeastern.pdf
+_Source_data/TOC_returns/Scotrail.pdf
+_Source_data/TOC_returns/Merseyrail.pdf

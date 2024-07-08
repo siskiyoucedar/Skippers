@@ -1,30 +1,20 @@
 library(tidyverse)
 
 # read in your data
-# no changes were made to the barrier .ods, except removing formatting
-# for the station entry / exits .ods, irrelevant columns were removed in addition to removing formatting
+
+# stations csv via table 1410 ods: https://dataportal.orr.gov.uk/statistics/usage/estimates-of-station-usage/
+# (irrelevant columns were removed in addition to removing formatting)
+# barriers .csv via a parse of this xml: https://internal.nationalrail.co.uk/4.0/stations.zip
+
 stations <- read.csv("_Source_data/stations_data.csv")
 barriers <- read.csv("_Source_data/barrier_data.csv")
 
 # clean - I really don't like these periods.
 
-barriers <- barriers |> 
-  rename(
-    "Station_Name" = `Station.Name`,
-    "NLC" = `National.Location.Code..NLC.`,
-    "ATG_Count" = `Number.of.ATGs.installed`
-  ) |>
-  
-# add a simple Y/N for ticket barriers
-  
-  mutate(
-  "Ticket_Barriers" = (ifelse((ATG_Count != 0), "Yes", "No")) 
-) |> 
-  arrange(
-    desc(ATG_Count)
-  )
-  
-# clean 2 electric boogaloo
+barriers <- barriers |> select(
+  "TLC" = CRS.Code,
+  "Ticket_Gates" = TicketGates
+)
 
 stations_barriers <- stations |>
   rename(
@@ -43,6 +33,16 @@ stations_barriers <- stations |>
     barriers
   )
 
+# I want to see the stations excluded. 
+
+station_check <- barriers |>
+  filter(
+    !(TLC %in% stations_barriers$TLC)
+  )
+
+# seems they are either new stations in Scotland or stations recently removed from service. 
+# That's fine - this year's December data will provide a brief corrective
+
 # let's have an owner breakdown!
 
 breakdown_owners <- stations_barriers |>
@@ -50,7 +50,7 @@ breakdown_owners <- stations_barriers |>
     "Value" = 1
   ) |>
   pivot_wider(
-    names_from = Ticket_Barriers,
+    names_from = Ticket_Gates,
     values_from = Value,
     values_fill = 0
   ) |>
@@ -59,10 +59,10 @@ breakdown_owners <- stations_barriers |>
   ) |>
   summarise(
     "Count" = n(),
-    "No. with Ticket Barriers" = sum(Yes),
+    "No. with Ticket Barriers" = sum(`TRUE`),
     "% with Ticket Barriers" =  paste0(format(round(
-      ((sum(Yes))/Count*100), 0), nsmall = 0), "%"),
-    "%_raw" = ((sum(Yes))/Count*100),
+      ((sum(`TRUE`))/Count*100), 0), nsmall = 0), "%"),
+    "%_raw" = ((sum(`TRUE`))/Count*100),
     "% All Stations" = paste0(format(round((Count/2579)*100, 0), nsmall = 0), "%")
     ) |>
   
@@ -84,7 +84,7 @@ breakdown_regions <- stations_barriers |>
     "Value" = 1
   ) |>
   pivot_wider(
-    names_from = Ticket_Barriers,
+    names_from = Ticket_Gates,
     values_from = Value,
     values_fill = 0
   ) |>
@@ -93,10 +93,10 @@ breakdown_regions <- stations_barriers |>
   ) |>
   summarise(
     "Count" = n(),
-    "No. with Ticket Barriers" = sum(Yes),
+    "No. with Ticket Barriers" = sum(`TRUE`),
     "% with Ticket Barriers" =  paste0(format(round(
-      ((sum(Yes))/Count*100), 0), nsmall = 0), "%"),
-    "%_raw" = ((sum(Yes))/Count*100),
+      ((sum(`TRUE`))/Count*100), 0), nsmall = 0), "%"),
+    "%_raw" = ((sum(`TRUE`))/Count*100),
     "% All Stations" = paste0(format(round((Count/2579)*100, 0), nsmall = 0), "%")
   ) |>
 # remove that one null
@@ -107,9 +107,15 @@ breakdown_regions <- stations_barriers |>
     desc(`%_raw`)
   ) 
 
-# that Southeastern result seems wrong. Let's check the output....
+write.csv(stations_barriers, "stations_barriers.csv")
 
-write.csv(stations_barriers, "stations_barriers.csv", append = TRUE)
+# 53% in London seems a bit low. Let me flick through...
 
-# yeah, it's definitely wrong
+london_check <- stations_barriers |>
+  filter(
+    Region == "London"
+  )
+
+rm(london_check, station_check, stations, barriers)
+
 
