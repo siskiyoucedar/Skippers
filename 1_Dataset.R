@@ -31,6 +31,14 @@ stations_barriers <- stations |>
   
   left_join(
     barriers
+  ) |>
+  mutate(
+    "Value" = 1
+  ) |>
+  pivot_wider(
+    names_from = Ticket_Gates,
+    values_from = Value,
+    values_fill = 0
   )
 
 # I want to see the stations excluded. 
@@ -46,14 +54,6 @@ station_check <- barriers |>
 # let's have an owner breakdown!
 
 breakdown_owners <- stations_barriers |>
-  mutate(
-    "Value" = 1
-  ) |>
-  pivot_wider(
-    names_from = Ticket_Gates,
-    values_from = Value,
-    values_fill = 0
-  ) |>
   group_by(
     Station_Owner
   ) |>
@@ -80,14 +80,6 @@ breakdown_owners <- stations_barriers |>
 # a regional output would be cool too.
 
 breakdown_regions <- stations_barriers |>
-  mutate(
-    "Value" = 1
-  ) |>
-  pivot_wider(
-    names_from = Ticket_Gates,
-    values_from = Value,
-    values_fill = 0
-  ) |>
   group_by(
     Region
   ) |>

@@ -7,7 +7,7 @@
 .DS_Store
 .quarto
 *.ods
-_Spatial_Data/
+/_Spatial_Data
 bin/
 stations_barriers.csv
 *.png
@@ -17,7 +17,5 @@ source for change in fares.url
 99_scraping_bin.R
 0_Scraping.R
 ticket_fares.xlsx
-_Source_data/TOC_returns/TfW.pdf
-_Source_data/TOC_returns/Southeastern.pdf
-_Source_data/TOC_returns/Scotrail.pdf
-_Source_data/TOC_returns/Merseyrail.pdf
+.RDataTmp
+/_Source_data
