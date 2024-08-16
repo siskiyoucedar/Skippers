@@ -20,8 +20,10 @@ plot_regions <- regions |> merge(
   breakdown_regions,
   by.x = "eer18nm",
   by.y = "Region",
-  all.x = TRUE
+  # all.x = TRUE
 ) 
+
+gb_shape <- plot_regions |> select(geometry) |> st_union()
 
 # plot the region shape
 
@@ -35,36 +37,43 @@ labels = c("0 to 5%", "5 to 10%", "10 to 25%", "25 to 30%", "Over 50%")
 
 tmap_mode("plot")
 
+# a simple region shape
+
 tm_shape(plot_regions) +
   tm_fill("%_raw", 
           title = " ",
           breaks = breaks,
-          palette = "viridis",
+          palette = viridis(n = 5, option = "D", begin = 0.3, end = 0.8),
           alpha = 0.9,
           labels = labels
   ) +
-  
-  tm_borders(col = "gray5") +
-  
+  tm_borders(
+    col = "gray5"
+    ) +
   # tm_compass(position = c("left", "top")) +
-  
-  tm_layout(main.title = "% of stations with ticket barriers",
-            main.title.size = 1.35,
-            main.title.fontfamily = "Accidental Presidency",
-            main.title.position = "center",
+  tm_layout( # main.title = "% of stations with ticket barriers",
+            # main.title.size = 2,
+            # main.title.fontfamily = "Accidental Presidency",
+            # main.title.position = "center",
             legend.position = c("right", "top"),
-            legend.text.color = "#fffffc",
-            bg.color = "grey15"
+            legend.text.color = "grey15",
+            legend.text.size = 0.75,
+  ) 
+
+# a simple stations shape
+
+tm_shape(gb_shape) +
+  tm_fill(col = viridis(n = 1, option = "D", begin = 0.5, alpha = 0.1)
+          ) +
+  tm_borders(
+    col = "gray5"
   ) +
-  
   tm_shape(for_map) +
-  tm_symbols(size = 0.2, 
+  tm_symbols(size = 0.15, 
              col = "Ticket Barriers?",
-             
-  ) +
-  tm_shape(train_lines) +
-  tm_lines(col = "black",
-           alpha = 0.5)
+             title.col = " ",
+             palette = c("#999999","white")
+  )
 
 # plot the county shape
 
@@ -75,20 +84,22 @@ tm_shape(ceremonial_barriers) +
   tm_fill("%_Raw", 
           title = " ",
           breaks = breaks2,
-          palette = "viridis",
+          palette = viridis(n = 5, option = "D", begin = 0.3, end = 0.8),
           alpha = 0.9,
           labels = labels2
   ) +
   
-  tm_borders(col = "gray5") +
+  tm_borders(
+    col = "gray5"
+    ) +
   
   # tm_compass(position = c("left", "top")) +
   
-  tm_layout(main.title = "% of stations with ticket barriers",
-            main.title.size = 2,
-            main.title.fontfamily = "Accidental Presidency",
-            main.title.position = "center",
+  tm_layout( #main.title = "% of stations with ticket barriers",
+            # main.title.size = 2,
+            # main.title.fontfamily = "Accidental Presidency",
+            # main.title.position = "center",
             legend.position = c("right", "top"),
-            legend.text.color = "#fffffc",
-            bg.color = "grey15"
+            legend.text.color = "grey15",
+            bg.color = "#fffffc"
   )
