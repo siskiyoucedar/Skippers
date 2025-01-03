@@ -77,6 +77,8 @@ breakdown_owners <- stations_barriers |>
 
 # figures will not sum to 100 because of the removed small operators
 
+write.csv(breakdown_owners, "breakdown_owners.csv", append = FALSE)
+
 # a regional output would be cool too.
 
 breakdown_regions <- stations_barriers |>

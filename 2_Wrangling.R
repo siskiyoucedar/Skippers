@@ -12,25 +12,26 @@ library(tmap)
 
 ## COUNTIES
 
-# Read my homespun GB BFC shape (not currently used:)
+# Read my homespun BFC counties:
 
-# outline <- st_read("_Spatial_data/GB_BFC.gpkg")
+ceremonials <- st_read("_Spatial_data\\Counties_BFC.gpkg") |> rename("County_Name" = Name)
 
-# Download the OS ceremonial counties: https://www.ordnancesurvey.co.uk/products/boundary-line
+# If you don't have that, download the OS ceremonial counties (BFE): https://www.ordnancesurvey.co.uk/products/boundary-line
 
-# Read ceremonial counties shape:
+# commented because mine's better
 
-OS_pre_shape <- (
-  "_Spatial_data\\bdline_gb.gpkg"
-)
-OS_layers <- st_layers(
-  OS_pre_shape
-)
-ceremonials <- st_read(
-  OS_pre_shape, "boundary_line_ceremonial_counties"
-)
-
-rm(OS_layers,OS_pre_shape)
+# OS_pre_shape <- (
+#   "_Spatial_data\\bdline_gb.gpkg"
+# )
+# OS_layers <- st_layers(
+#   OS_pre_shape
+# )
+# ceremonials <- st_read(
+#   OS_pre_shape, "boundary_line_ceremonial_counties"
+# )
+# 
+# 
+# rm(OS_layers,OS_pre_shape)
 
 # you'll also need lat / long data - comes from this FOI on car parking: https://dataportal.orr.gov.uk/media/1924/ad-hoc-station-car-parking.csv
 lat_long <- read.csv("_Spatial_data/stations_lat_long.csv") |> 
@@ -79,7 +80,7 @@ rm(stations_geo)
 
 county_barriers <- as.data.frame(stations_counties) |>
   group_by(
-    Name
+    County_Name
     ) |>
   summarise(
     "N" = n(),
@@ -98,8 +99,19 @@ county_barriers <- as.data.frame(stations_counties) |>
 
 # make the shape (and remove missing vals, i.e. counties with no stations)
 
-ceremonial_barriers <- left_join(ceremonials, county_barriers) |>
+plot_ceremonials <- left_join(ceremonials, county_barriers) |>
   mutate(
     `%_Raw` = ifelse(is.na(`%_Raw`), 0, `%_Raw`)
   )
+
+# just rework the stations dataset a touch
+
+stations_counties <- stations_counties |>
+  mutate(
+    "Ticket Barriers" = ifelse(`TRUE.` == 1, TRUE, FALSE)
+  ) |>
+  select(
+    -`TRUE.`, - `FALSE.`,-`NA.`,-Area_Description
+  ) 
+
 rm(ceremonials, county_barriers)

@@ -19,3 +19,8 @@ source for change in fares.url
 ticket_fares.xlsx
 .RDataTmp
 /_Source_data
+*.pptx
+*.pbf
+*.obj
+*.docx
+/lucene
