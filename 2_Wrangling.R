@@ -1,9 +1,8 @@
 library(tidyverse)
 library(sf)
 library(tmap)
-# run after 1_Dataset.R, do not clean environment
 
-# ADD A FIGURE FOR THE % OF PASSENGER ENTRY-EXITS THROUGH STATIONS WITH TICKET BARRIERS
+# run after 1_Dataset.R, do not clean environment
 
 ### WRANGLING
 
@@ -18,7 +17,7 @@ ceremonials <- st_read("_Spatial_data\\Counties_BFC.gpkg") |> rename("County_Nam
 
 # If you don't have that, download the OS ceremonial counties (BFE): https://www.ordnancesurvey.co.uk/products/boundary-line
 
-# commented because mine's better
+# commented out because mine's better
 
 # OS_pre_shape <- (
 #   "_Spatial_data\\bdline_gb.gpkg"
@@ -33,7 +32,8 @@ ceremonials <- st_read("_Spatial_data\\Counties_BFC.gpkg") |> rename("County_Nam
 # 
 # rm(OS_layers,OS_pre_shape)
 
-# you'll also need lat / long data - comes from this FOI on car parking: https://dataportal.orr.gov.uk/media/1924/ad-hoc-station-car-parking.csv
+# you'll also need lat / long data - weirdly comes from this FOI on car parking: https://dataportal.orr.gov.uk/media/1924/ad-hoc-station-car-parking.csv
+
 lat_long <- read.csv("_Spatial_data/stations_lat_long.csv") |> 
   rename(
     "TLC" = CrsCode
@@ -58,7 +58,7 @@ stations_geo <- joined |> filter(!(is.na(Latitude))) |>
 
 joined_test <- joined |> filter(is.na(Latitude))
 
-rm(joined, joined_test, lat_long, stations_barriers)
+rm(joined, joined_test, lat_long)
 
 # A buffer was added for two stations in the sea, but this did not really work. Solution TBC
 # Three stations (Newcourt, Oxford Parkway, Apperley Bridge) had their co-ordinates manually changed.

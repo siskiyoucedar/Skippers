@@ -24,3 +24,4 @@ ticket_fares.xlsx
 *.obj
 *.docx
 /lucene
+*.qgz
