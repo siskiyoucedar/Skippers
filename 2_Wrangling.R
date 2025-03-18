@@ -71,7 +71,7 @@ lost_stations <- stations_geo |> filter(
   !(TLC %in% (stations_counties$TLC))
 )
 
-rm(stations_geo)
+rm(stations_geo, lost_stations) # if not needed
 
 # Ryde - in the sea
 # Stranraer - in the sea
