@@ -1,3 +1,7 @@
+library(tidyverse)
+library(sf)
+library(tmap)
+
 ## LINING
 
 # too much information on one map, but useful for future reference:
@@ -219,7 +223,12 @@ stations_output_pivot <- stations_output_pivot |>
                                      "TMD", "Diamond Crossover",
                                      "Down Hendon", "CTRL Up",
                                      "Down ", "Up Slow",
-                                     "Loop"), collapse = "|")
+                                     "Loop", "Crossrail Crossover",
+                                     "Up Llandaff",
+                                     "Up Barry","North London Incline",
+                                     "Up High Level Arrival Line", "Up Wallington",
+                                     "Up Goole","Up Passenger Loop",
+                                     "Goods"), collapse = "|")
       ),
       "None_found",
       Route_Name

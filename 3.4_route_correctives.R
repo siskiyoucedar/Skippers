@@ -1,9 +1,63 @@
+# this dataset can run independently of the others
 
-# first read in our station data
+library(tidyverse)
+
+# first read in our station data - this dataset contains modified entries for otherwise borked stations
 
 stations <- read.csv("_Spatial_data/stations_routes_modified.csv", row.names = 1) 
+# 
+# stations_raw <- read.csv("_Spatial_data/stations_routes.csv", row.names = 1)
+# 
+# clipped <- stations_raw |>
+#   filter(
+#     Route_Name == "None_found"
+#   )
+# 
+# stations_corrected <- stations |>
+#   filter(
+#     TLC %in% clipped$TLC
+#   )
+# 
+# stations <- stations_raw |>
+#   rbind(stations_corrected) |>
+#   filter(
+#     !(Route_Name == "None_found")
+#   )
 
-# needs modifying again to clear off 'up slow'
+stations <- stations |>
+  mutate(
+    "Route_Name" = str_to_title(Route_Name)
+  ) |>
+  unique()
+
+# up barry, up llandaff, "Line"... need to modify more
+  
+# get rid of metro services exc lizzy line
+
+# LINES TO REMOVE:
+to_remove <- c(
+  # "Elizabeth Line",
+  "Central Line",
+  "Northern Line",
+  "Jubilee Line",
+  "Bakerloo Line",
+  "Victoria Line",
+  "Circle, Hammersmith & City and Metropolitan Lines",
+  "Circle and District Lines",
+  "Circle and Hammersmith & City Lines",
+  "Docklands Light Railway",
+  "Metropolitan Line",
+  "Picadilly Line",
+  "District Line",
+  "Hammersmith & City Line",
+  "Circle Line",
+  "Waterloo & City Line",
+  "Hammersmith & City and Metropolitan Lines",
+  "None_found" # essential
+)
+
+stations <- stations |>
+  filter(!(Route_Name %in% to_remove))
 
 # let's summarise
 
