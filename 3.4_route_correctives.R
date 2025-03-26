@@ -4,7 +4,7 @@ library(tidyverse)
 
 # first read in our station data - this dataset contains modified entries for otherwise borked stations
 
-stations <- read.csv("_Spatial_data/stations_routes_modified.csv", row.names = 1) 
+stations <- read.csv("stations_routes_modified.csv", row.names = 1) 
 # 
 # stations_raw <- read.csv("_Spatial_data/stations_routes.csv", row.names = 1)
 # 
@@ -84,7 +84,13 @@ biggest_shortfall <- distinguishing |>
   filter(
     `% Journeys from Ticket Barrier-Less Stations`> 99
   ) |>
-  arrange(desc(`Total Tickets`))
+  arrange(desc(`Total Tickets`)) |>
+  
+  # clear off branch lines etc.
+  
+  filter(
+    Count > 2
+  )
 
 # and the inverse - routes with the highest % ticket barriers but fewest passengers
 
@@ -92,7 +98,13 @@ lowest_benefit <- distinguishing |>
   filter(
     `% Journeys from Ticket Barrier-Less Stations` <= 5
   ) |>
-  arrange(`Total Tickets`)
+  arrange(`Total Tickets`) |>
+  
+  # clear off branch lines etc.
+  
+  filter(
+    Count > 2
+  )
 
 ECML_stations <- stations |>
   filter(
