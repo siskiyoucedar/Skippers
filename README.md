@@ -1,5 +1,5 @@
 # Skippers
-A project on how to avoid rail fares - or how to avoid people avoiding rail fares.
+A project on how to avoid (people avoiding) rail fares.
 
 ## Input Data
 
